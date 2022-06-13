@@ -1,0 +1,70 @@
+{
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.fontLigatures": true,
+  "editor.snippetSuggestions": "top",
+  "emmet.syntaxProfiles": {
+    "javascript": "jsx"
+  },
+  // files
+  "files.associations": {
+    "*.js": "javascriptreact",
+    "*.html": "html"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.DS_Store": true,
+    "*/node_modules": true,
+    "**/.idea": true,
+    "**/.vscode": false,
+    "**/yarn.lock": true,
+    "**/tmp": true,
+    "node_modules": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true,
+    "**/tmp": true,
+    "**/build": true
+  },
+  "files.trimTrailingWhitespace": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/tmp": true,
+    "**/coverage": true,
+    "**/build": true,
+    "**/Pods": true,
+    "**/*.xcodeproj": true,
+    "**/*.xcworkspace": true,
+    "**/.meteor": true
+  },
+  "html.suggest.html5": true,
+  "extensions.autoUpdate": true,
+  // flow
+  "javascript.validate.enable": false,
+  "prettier.parser": "flow",
+  // eslint
+  "workbench.statusBar.feedback.visible": false,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "window.zoomLevel": 1,
+  "breadcrumbs.enabled": true,
+  "editor.suggestSelection": "first",
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "eslint.autoFixOnSave": true
+  },
+  "terminal.integrated.rendererType": "dom",
+  "editor.fontSize": 11,
+  "tabnine.experimentalAutoImports": true,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
