@@ -1,0 +1,17 @@
+{
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    ["babel-plugin-styled-components"]
+  ],
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
+  // "presets": [
+  //   "react-native",
+  //   "metro-react-native-babel-preset"
+  // ],
+  // "sourceMaps": "inline"
+}

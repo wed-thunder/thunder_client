@@ -1,4 +1,12 @@
 {
   "name": "thunder_client",
-  "displayName": "thunder_client"
+  "displayName": "thunder_client",
+  "ios": {
+    "bundleIdentifier": "thunder"
+  },
+  "runtimeVersion": "1.0.0",
+  "android": {},
+  "updates": {
+    "url": "https://u.expo.dev/2e10fdf5-6c2f-46c8-b0c5-ecb3fd487283"
+  }
 }

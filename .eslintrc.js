@@ -1,24 +1,101 @@
 module.exports = {
   env: {
-    browser: true,
     es2021: true,
+    node: true,
+    jest: true,
   },
-  extends: [
-    'plugin:react/recommended',
-    'airbnb',
-  ],
+  extends: ['airbnb', 'plugin:react/recommended', 'prettier', 'plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    project: './tsconfig.json',
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 12,
+    ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: [
-    'react',
-    '@typescript-eslint',
-  ],
+  plugins: ['react', '@typescript-eslint', 'react-hooks', 'prettier'],
   rules: {
+    indent: ['error', 2, { SwitchCase: 1 }],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single', { avoidEscape: true }],
+    semi: ['error', 'always'],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react/jsx-filename-extension': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-unsafe-assignment': 'error',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+    '@typescript-eslint/explicit-function-return-type': ['error', { allowExpressions: true }],
+    '@typescript-eslint/restrict-template-expressions': 'off',
+    'prettier/prettier': 'error',
+    'react/display-name': 'off',
+    'react/prop-types': 'off',
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': ['error'],
+    eqeqeq: ['error', 'smart'],
+    curly: ['error', 'all'],
+    // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/order.md
+    'import/order': [
+      'error',
+      {
+        groups: [
+          'builtin',
+          'external',
+          ['index', 'sibling'],
+          'parent',
+          'internal',
+          'type',
+          'object',
+        ],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'external',
+            position: 'before',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+        },
+        'newlines-between': 'always',
+        warnOnUnassignedImports: true,
+      },
+    ],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
+    'import/extensions': 0,
+    'import/no-unresolved': 0,
+    'react/style-prop-object': [
+      'error',
+      {
+        allow: ['StatusBar'],
+      },
+    ],
+    'no-param-reassign': [
+      'error',
+      { props: true, ignorePropertyModificationsFor: ['self', 'config'] },
+    ],
+    camelcase: ['error', { allow: ['jwt_decode'] }],
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
+    indent: 'off',
+    'lines-between-class-members': 'off',
+    'react/require-default-props': 'off',
+    'react/no-unstable-nested-components': 'off',
+    'react/jsx-props-no-spreading': 'off',
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    typescript: { project: 'tsconfig.json' },
+  },
+  globals: {
+    NestAPI: false,
+    NestListResponse: false,
   },
 };

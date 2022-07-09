@@ -1,115 +1,165 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
+// import * as eva from '@eva-design/eva';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+// import { ApplicationProvider } from '@ui-kitten/components';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
+import * as Updates from 'expo-updates';
+import { observer } from 'mobx-react';
+import React, { ReactElement, useEffect } from 'react';
+import { Alert, AppState, AppStateStatus, Platform } from 'react-native';
+import { QueryClientProvider, QueryClient, focusManager } from 'react-query';
+import * as Sentry from 'sentry-expo';
 
-import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { registerExpoPushToken } from '@/apis/services/exponent.service';
+import ToastAlert from '@/components/Alert/ToastAlert';
+import Router from '@/navigation';
+import userStorage from '@/storage/user';
+import rootStore from '@/stores';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+Sentry.init({
+  dsn: 'https://90fe24d5d4f847819c52af9d54a8e16e@o494846.ingest.sentry.io/6417354',
+  enableInExpoDevelopment: true,
+  debug: false,
+  environment: process.env.NODE_ENV,
+  release: Updates.runtimeVersion,
+});
 
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+Notifications.setNotificationHandler({
+  handleNotification: async (notification) => {
+    const { channelStore } = rootStore.sendbirdStore;
+    const triggers: any = notification?.request.trigger;
 
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+    if (!triggers) {
+      return {
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      };
+    }
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    let sendbirdData = null;
+    if (Platform.OS === 'ios') {
+      const data = triggers.payload;
+      if (data.sendbird) {
+        sendbirdData = data.sendbird;
+      }
+    } else {
+      const { data } = triggers.remoteMessage;
+      if (data.sendbird) {
+        sendbirdData = JSON.parse(data.sendbird);
+      }
+    }
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+    if (sendbirdData?.channel?.channel_url === channelStore.openChannelUrl) {
+      return null;
+    }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+    return {
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    };
   },
 });
 
-export default App;
+async function checkUpdate(): Promise<void> {
+  // eslint-disable-next-line no-undef
+  if (__DEV__) {
+    // skip in development
+    return;
+  }
+
+  try {
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      await Updates.fetchUpdateAsync();
+
+      Alert.alert(
+        '업데이트를 위해 앱을 재시작합니다.',
+        null,
+        [{ text: '확인', onPress: () => Updates.reloadAsync() }],
+        { cancelable: false },
+      );
+    }
+  } catch (e) {
+    // handle or log error
+  }
+}
+
+function onAppStateChange(status: AppStateStatus): void {
+  // Refetch on App focus
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active');
+  }
+
+  checkUpdate();
+}
+
+SplashScreen.preventAutoHideAsync();
+
+// Create a query client
+const queryClient = new QueryClient();
+
+export default function App(): ReactElement {
+  useEffect(() => {
+    const registerForPushNotificationsAsync = async (): Promise<void> => {
+      if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+          return;
+        }
+
+        // Expo Token 저장
+        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        const user = await userStorage.read();
+        if (user) {
+          try {
+            await registerExpoPushToken(token, Device.osName);
+          } catch (e) {
+            Sentry.Native.captureException(e);
+          }
+        }
+
+        if (Platform.OS === 'android') {
+          Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+          });
+        }
+      }
+    };
+    registerForPushNotificationsAsync();
+  }, []);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', onAppStateChange);
+    return () => subscription.remove();
+  }, []);
+
+  const GlobalToastAlert = observer(() => {
+    const { toastAlertStore } = rootStore;
+    return <ToastAlert closeToast={toastAlertStore.closeToast} {...toastAlertStore} />;
+  });
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <StatusBar style="auto" backgroundColor="#FFF" translucent={false} />
+
+      <ActionSheetProvider>
+        <>
+          <Router />
+          <GlobalToastAlert />
+        </>
+      </ActionSheetProvider>
+    </QueryClientProvider>
+  );
+}
