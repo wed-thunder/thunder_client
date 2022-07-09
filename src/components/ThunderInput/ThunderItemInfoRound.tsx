@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { StyleProp, TextStyle, ViewStyle } from 'react-native';
 
-import JumpInputRound, { JumpInputProps } from './JumpInputRound';
+import ThunderInputRound, { ThunderInputProps } from './ThunderInputRound';
 
-export interface JumpNumberInputProps extends JumpInputProps {
+export interface ThunderNumberInputProps extends ThunderInputProps {
   syntax?: boolean;
 }
 
-function JumpItemInfoRound({
+function ThunderItemInfoRound({
   textInputStyle,
   containerStyle,
   ...props
-}: JumpNumberInputProps): React.ReactElement {
+}: ThunderNumberInputProps): React.ReactElement {
   const defaultTextInputStyle: StyleProp<TextStyle> = { fontSize: 15 };
   const defaultContainerStyle: StyleProp<ViewStyle> = {
     marginTop: 0,
@@ -19,7 +19,7 @@ function JumpItemInfoRound({
   };
 
   return (
-    <JumpInputRound
+    <ThunderInputRound
       verticalLabel={false}
       textAlign="right"
       labelStyle={{ fontWeight: null }}
@@ -31,4 +31,4 @@ function JumpItemInfoRound({
   );
 }
 
-export default JumpItemInfoRound;
+export default ThunderItemInfoRound;

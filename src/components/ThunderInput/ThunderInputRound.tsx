@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  StyleProp,
-  TextInput,
-  TextInputProps,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import { StyleProp, TextInput, TextInputProps, TextStyle, ViewStyle } from 'react-native';
 import styled from 'styled-components/native';
 
 import { H5 } from '@/components/Text';
@@ -122,7 +116,7 @@ const FooterMessage = styled(H5)<{ colorStyle?: ColorStyle }>`
   margin-top: 8px;
 `;
 
-export interface JumpInputProps extends TextInputProps {
+export interface ThunderInputProps extends TextInputProps {
   formattedValue?: string;
   verticalLabel?: boolean;
   label?: string;
@@ -144,7 +138,7 @@ export interface JumpInputProps extends TextInputProps {
   textInputRef?: React.RefObject<TextInput>;
 }
 
-function JumpInputRound({
+function ThunderInputRound({
   value,
   formattedValue,
   verticalLabel = true,
@@ -166,7 +160,7 @@ function JumpInputRound({
   editable = true,
   textInputRef,
   ...props
-}: JumpInputProps): React.ReactElement {
+}: ThunderInputProps): React.ReactElement {
   const [focused, setFocused] = React.useState(false);
 
   const getColorStyle = (): ColorStyle => {
@@ -198,9 +192,7 @@ function JumpInputRound({
 
     return (
       <FooterMessageContainer>
-        <FooterMessage colorStyle={colorStyle}>
-          {errorMessage || footerMessage}
-        </FooterMessage>
+        <FooterMessage colorStyle={colorStyle}>{errorMessage || footerMessage}</FooterMessage>
       </FooterMessageContainer>
     );
   }
@@ -229,10 +221,7 @@ function JumpInputRound({
         )}
 
         <InputBoxContainer style={inputContainerStyle}>
-          <InputContainer
-            colorStyle={colorStyle}
-            editable={editable}
-            forceShow={forceShow}>
+          <InputContainer colorStyle={colorStyle} editable={editable} forceShow={forceShow}>
             {textInputLeftIcon}
 
             <TextInputItem
@@ -271,4 +260,4 @@ function JumpInputRound({
   );
 }
 
-export default JumpInputRound;
+export default ThunderInputRound;

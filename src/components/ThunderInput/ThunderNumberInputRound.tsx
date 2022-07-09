@@ -1,31 +1,28 @@
 import _ from 'lodash';
 import * as React from 'react';
 
-import JumpInputRound, { JumpInputProps } from './JumpInputRound';
+import ThunderInputRound, { ThunderInputProps } from './ThunderInputRound';
 
 import { COLOR } from '@/constant/color';
 import { numberWithCommas } from '@/utils';
 
-export interface JumpNumberInputProps extends JumpInputProps {
+export interface ThunderNumberInputProps extends ThunderInputProps {
   syntax?: boolean;
   footerMessage?: string;
 }
 
-function JumpNumberInputRound({
+function ThunderNumberInputRound({
   syntax,
   textInputStyle,
   ...props
-}: JumpNumberInputProps): React.ReactElement {
+}: ThunderNumberInputProps): React.ReactElement {
   const valueTextInputStyle = {
     color: _.toNumber(props.value) >= 0 ? COLOR.MBLUE : COLOR.JRED,
   };
-  const mergedTextInputStyle = Object.assign(
-    valueTextInputStyle,
-    textInputStyle,
-  );
+  const mergedTextInputStyle = Object.assign(valueTextInputStyle, textInputStyle);
 
   return (
-    <JumpInputRound
+    <ThunderInputRound
       formattedValue={numberWithCommas(props.value)}
       textAlign="right"
       keyboardType="numeric"
@@ -35,4 +32,4 @@ function JumpNumberInputRound({
   );
 }
 
-export default JumpNumberInputRound;
+export default ThunderNumberInputRound;

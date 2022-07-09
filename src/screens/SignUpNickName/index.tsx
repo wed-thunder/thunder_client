@@ -1,16 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  Animated,
-  Keyboard,
-  TextInput,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import { Alert, Animated, Keyboard, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 
 import { getNickNameExists } from '@/apis/services/customer.service';
-import { JumpInputRound } from '@/components/JumpInput';
+import { ThunderInputRound } from '@/components/ThunderInput';
 import COLOR from '@/constant/color';
 import { SignUpNickNameRouteProps } from '@/navigation/types';
 import rootStore from '@/stores';
@@ -43,8 +37,7 @@ const Title = styled.Text`
 `;
 
 const Button = styled.TouchableOpacity<{ canClick: boolean }>`
-  background-color: ${(props): string =>
-    props.canClick ? COLOR.MBLUE : '#E5E6EA'};
+  background-color: ${(props): string => (props.canClick ? COLOR.MBLUE : '#E5E6EA')};
   align-items: center;
   border-radius: 8px;
   width: 100%;
@@ -67,8 +60,7 @@ function SignUpNickName({ route }: Props): React.ReactElement {
   const { provider, accessToken, refreshToken } = route.params;
 
   const [nickName, setNickName] = useState<string>('');
-  const [nickNameButtonEnabled, setNickNameButtonEnabled] =
-    useState<boolean>(false);
+  const [nickNameButtonEnabled, setNickNameButtonEnabled] = useState<boolean>(false);
 
   const refInput: React.RefObject<TextInput> = useRef();
   const fadeAnimName = useRef(new Animated.Value(0)).current;
@@ -115,7 +107,7 @@ function SignUpNickName({ route }: Props): React.ReactElement {
           <Title>{'프리미엄체크 시작하기 !\n닉네임을 입력해주세요.'}</Title>
 
           <Animated.View style={[{ opacity: fadeAnimName }]}>
-            <JumpInputRound
+            <ThunderInputRound
               textInputRef={refInput}
               labelStyle={{ height: 0 }}
               textInputStyle={{

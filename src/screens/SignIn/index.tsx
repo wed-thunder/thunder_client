@@ -86,7 +86,7 @@ function SignIn({ navigation }: Props): React.ReactElement {
 
     if (result.accessToken) {
       // 소셜 토큰이 연결되어 있지만, 프리미엄 체크는 없는 경우
-      Alert.alert('Jump 통합 알림', 'Jump 통합아이디가 있습니다.', [
+      Alert.alert('Thunder 통합 알림', 'Thunder 통합아이디가 있습니다.', [
         {
           text: '취소',
           style: 'cancel',

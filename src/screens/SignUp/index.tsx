@@ -24,7 +24,7 @@ import { isNetworkError } from '@/apis';
 // import { getNickNameExists } from '@/apis/services/customer.service';
 // import CloseIcon from '@/assets/ic_close_circle.svg';
 // import DotIcon from '@/assets/ic_dot.svg';
-import { JumpInputRound } from '@/components/JumpInput';
+import { ThunderInputRound } from '@/components/ThunderInput';
 import COLOR from '@/constant/color';
 import rootStore from '@/stores';
 import { cleanPhoneNumber, convertBirthDate } from '@/utils';
@@ -334,7 +334,7 @@ function SignUp({ route, navigation }): React.ReactElement {
         if (result) {
           // 해당 번호로 Customer가 있는 경우
           if (result.profile) {
-            Alert.alert('Jump 통합 알림', 'Jump 통합아이디가 있습니다.', [
+            Alert.alert('Thunder 통합 알림', 'Thunder 통합아이디가 있습니다.', [
               {
                 text: '취소',
                 style: 'cancel',
@@ -558,7 +558,7 @@ function SignUp({ route, navigation }): React.ReactElement {
             <Animated.View style={[{ opacity: fadeAnimBirth }]}>
               <HorizontalView>
                 <HorizontalView style={{ marginRight: 12 }}>
-                  <JumpInputRound
+                  <ThunderInputRound
                     textInputRef={refInput[2]}
                     containerStyle={{ width: 165 }}
                     labelStyle={{ height: 0 }}
@@ -575,7 +575,7 @@ function SignUp({ route, navigation }): React.ReactElement {
                   />
                 </HorizontalView>
                 <HorizontalView style={{ alignItems: 'center' }}>
-                  <JumpInputRound
+                  <ThunderInputRound
                     textInputRef={refInput[3]}
                     containerStyle={{ width: 42, marginRight: 21 }}
                     labelStyle={{ height: 0 }}
@@ -616,7 +616,7 @@ function SignUp({ route, navigation }): React.ReactElement {
 
           {step > STEP.AUTH && (
             <Animated.View style={[{ opacity: fadeAnimName }]}>
-              <JumpInputRound
+              <ThunderInputRound
                 textInputRef={refInput[1]}
                 labelStyle={{ height: 0 }}
                 textInputStyle={{
@@ -640,7 +640,7 @@ function SignUp({ route, navigation }): React.ReactElement {
           {step > STEP.PHONE && (
             <Animated.View style={[{ opacity: fadeAnimAuth }]}>
               <View>
-                <JumpInputRound
+                <ThunderInputRound
                   textInputRef={refInput[0]}
                   labelStyle={{ height: 0 }}
                   textInputStyle={{
@@ -661,7 +661,7 @@ function SignUp({ route, navigation }): React.ReactElement {
             </Animated.View>
           )}
 
-          <JumpInputRound
+          <ThunderInputRound
             labelStyle={{ height: 0 }}
             textInputStyle={{
               fontSize: 16,
