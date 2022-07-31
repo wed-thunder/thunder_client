@@ -5,15 +5,16 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import PrivateRootStackNavigator from './private';
 import PublicRootStackNavigator from './public';
-import { PrivateRootSTackParamList } from './types';
+import { PrivateRootStackParamList } from './types';
 
-import authStorage from '@/storage/auth';
+// import authStorage from '@/storage/auth';
 import rootStore from '@/stores';
 
 function Router(): React.ReactElement {
-  const navigationRef = useRef<NavigationContainerRef<PrivateRootSTackParamList>>(null);
+  const navigationRef = useRef<NavigationContainerRef<PrivateRootStackParamList>>(null);
   const [navigationLoading, setNavigationLoading] = useState(false);
   const { authStore } = rootStore;
+  console.log(navigationLoading);
 
   return (
     <SafeAreaProvider>

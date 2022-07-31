@@ -1,10 +1,10 @@
 import * as Device from 'expo-device';
 import React from 'react';
-import { Alert, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 
 import COLOR from '@/constant/color';
-import { PublicNavigationProp } from '@/navigation/types';
+// import { PublicNavigationProp } from '@/navigation/types';
 import rootStore from '@/stores';
 
 const Container = styled(SafeAreaView)`
@@ -63,49 +63,49 @@ const AuthText = styled.Text`
   color: #000000;
 `;
 
-interface Props {
-  navigation: PublicNavigationProp;
-}
+// interface Props {
+//   navigation: PublicNavigationProp;
+// }
 
-function SignIn({ navigation }: Props): React.ReactElement {
+function SignIn(): React.ReactElement {
   const { authStore } = rootStore;
 
   // const onClickLogin = async
 
   const onClickSocialStart = async (type: string): Promise<void> => {
     const result = type === 'kakao' ? await authStore.login() : await authStore.login();
+    console.log(result);
+    // if (!result) {
+    //   Alert.alert(`${type} 계정 연동이 원활하지 않습니다. 잠시후 다시 시도해 주세요.`);
+    // }
 
-    if (!result) {
-      Alert.alert(`${type} 계정 연동이 원활하지 않습니다. 잠시후 다시 시도해 주세요.`);
-    }
+    // if (result.isLogin) {
+    //   // 해당 소셜 토큰이 있고 프리미엄 체크 아이디가 있는경우
+    //   return;
+    // }
 
-    if (result.isLogin) {
-      // 해당 소셜 토큰이 있고 프리미엄 체크 아이디가 있는경우
-      return;
-    }
-
-    if (result.accessToken) {
-      // 소셜 토큰이 연결되어 있지만, 프리미엄 체크는 없는 경우
-      Alert.alert('Thunder 통합 알림', 'Thunder 통합아이디가 있습니다.', [
-        {
-          text: '취소',
-          style: 'cancel',
-        },
-        {
-          text: '확인',
-          onPress: async (): Promise<void> => {
-            navigation.navigate('SignUpNickName', {
-              provider: type,
-              accessToken: result.accessToken,
-              refreshToken: result.refreshToken,
-            });
-          },
-          style: 'default',
-        },
-      ]);
-    } else {
-      navigation.navigate('SignUp', { provider: type });
-    }
+    // if (result.accessToken) {
+    //   // 소셜 토큰이 연결되어 있지만, 프리미엄 체크는 없는 경우
+    //   Alert.alert('Thunder 통합 알림', 'Thunder 통합아이디가 있습니다.', [
+    //     {
+    //       text: '취소',
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: '확인',
+    //       onPress: async (): Promise<void> => {
+    //         navigation.navigate('SignUpNickName', {
+    //           provider: type,
+    //           accessToken: result.accessToken,
+    //           refreshToken: result.refreshToken,
+    //         });
+    //       },
+    //       style: 'default',
+    //     },
+    //   ]);
+    // } else {
+    //   navigation.navigate('SignUp', { provider: type });
+    // }
   };
 
   return (

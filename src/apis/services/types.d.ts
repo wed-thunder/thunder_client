@@ -7,21 +7,17 @@ namespace ThunderAPI {
     timestamp: number;
   };
 
-  declare type User = {
-    id: number;
-    name: string;
-    birthday: string;
-    phoneNumber: string;
-    gender: string;
-    email: string;
+  declare namespace User {
+    declare type UpdateUserDto = {
+      name?: string;
+    };
 
-    verified: boolean;
-    token: string;
-    refreshToken: string;
-
-    lastLoggedAt: string;
-    logged: boolean;
-  };
+    declare type UpdateServiceDto = {
+      service: string;
+      notificationApprovedAt?: string;
+      nightNotificationApprovedAt?: string;
+    };
+  }
 }
 
 declare type ThunderListResponse<T> = {
@@ -45,3 +41,19 @@ declare type ThunderListResponse<T> = {
 };
 
 enum ErrorMessage {}
+
+declare type User = {
+  id: number;
+  name: string;
+  birthday: string;
+  phoneNumber: string;
+  gender: string;
+  email: string;
+
+  verified: boolean;
+  token: string;
+  refreshToken: string;
+
+  lastLoggedA: string;
+  logged: boolean;
+};

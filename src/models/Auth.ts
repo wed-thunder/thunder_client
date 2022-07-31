@@ -29,6 +29,6 @@ export const AuthUser = types
     },
   }));
 
-export interface IAuthUser extends Instance<typeof AuthUser> {}
+export type IAuthUser = Instance<typeof AuthUser>;
 
-export interface IAuth extends Instance<typeof Auth> {}
+export type IAuth = Instance<typeof Auth>;

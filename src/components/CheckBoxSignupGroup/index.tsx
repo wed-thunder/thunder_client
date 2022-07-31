@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { CheckBox as KittenCheckBox } from '@ui-kitten/components';
 import React from 'react';
 import { View } from 'react-native';
@@ -26,7 +27,12 @@ const CheckBoxText = styled(CheckBoxTitle)`
   font-weight: normal;
 `;
 
-function CheckBoxGroup({ selectedKeys, setSelectedKeys }): React.ReactElement {
+interface Props {
+  selectedKeys: boolean[];
+  setSelectedKeys: (index: number) => any;
+}
+
+function CheckBoxGroup({ selectedKeys, setSelectedKeys }: Props): React.ReactElement {
   return (
     <View>
       <Container disabled>

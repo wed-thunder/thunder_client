@@ -3,7 +3,7 @@ import React from 'react';
 
 import BottomTabNavigator from './BottomTabNavigator';
 
-import { PrivateRootSTackParamList } from '../types';
+import { PrivateRootStackParamList } from '../types';
 
 // const defaultHeaderOptions: StackNavigationOptions = {
 //   headerShadowVisible: false,
@@ -17,7 +17,7 @@ import { PrivateRootSTackParamList } from '../types';
 //   headerBackImage: () => <IconBack style={{ marginLeft: 15 }} width={24} height={24} />,
 // };
 
-const Stack = createStackNavigator<PrivateRootSTackParamList>();
+const Stack = createStackNavigator<PrivateRootStackParamList>();
 
 function PrivateStackNavigator(): React.ReactElement {
   return (

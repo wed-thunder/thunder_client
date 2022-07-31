@@ -27,7 +27,7 @@ import { isNetworkError } from '@/apis';
 import { ThunderInputRound } from '@/components/ThunderInput';
 import COLOR from '@/constant/color';
 import rootStore from '@/stores';
-import { cleanPhoneNumber, convertBirthDate } from '@/utils';
+import { cleanPhoneNumber } from '@/utils';
 
 const Container = styled.SafeAreaView`
   height: 100%;
@@ -138,8 +138,8 @@ enum STEP {
 
 type TimeoutId = ReturnType<typeof setInterval>;
 
-function SignUp({ route, navigation }): React.ReactElement {
-  const { provider } = route.params;
+function SignUp({ navigation }): React.ReactElement {
+  // const { provider } = route.params;
   const { authStore } = rootStore;
 
   // const fadeAnim = Array(4).fill(useRef(new Animated.Value(0)).current);
@@ -191,25 +191,25 @@ function SignUp({ route, navigation }): React.ReactElement {
       refInput[1].current?.focus();
     });
   };
-  const fadeInBirth = (): void => {
-    setStep(STEP.SIGN);
-    Animated.timing(fadeAnimBirth, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: true,
-    }).start(() => {
-      refInput[2].current?.focus();
-    });
-  };
+  // const fadeInBirth = (): void => {
+  //   setStep(STEP.SIGN);
+  //   Animated.timing(fadeAnimBirth, {
+  //     toValue: 1,
+  //     duration: 500,
+  //     useNativeDriver: true,
+  //   }).start(() => {
+  //     refInput[2].current?.focus();
+  //   });
+  // };
 
   const signIn = useLocalObservable(() => ({
     authBtnText: '',
     expiredTime: null,
     reserveTime: null,
-
     phone: '',
     code: '',
-    nickName: '',
+    password: '',
+    name: '',
     birthDay: '',
     gender: '',
     codeError: '',
@@ -220,7 +220,6 @@ function SignUp({ route, navigation }): React.ReactElement {
     isAuthInputWaiting: false,
     isAuthLoading: false,
     isSignInLoading: false,
-
     timeoutId: null as TimeoutId,
 
     setSignInLoading(value: boolean) {
@@ -333,7 +332,7 @@ function SignUp({ route, navigation }): React.ReactElement {
 
         if (result) {
           // 해당 번호로 Customer가 있는 경우
-          if (result.profile) {
+          if (result.accessToken) {
             Alert.alert('Thunder 통합 알림', 'Thunder 통합아이디가 있습니다.', [
               {
                 text: '취소',
@@ -342,16 +341,16 @@ function SignUp({ route, navigation }): React.ReactElement {
               {
                 text: '확인',
                 onPress: async (): Promise<void> => {
-                  const service = result.profile?.services.find((x) => x.service === 'p-check');
+                  const service = result.accessToken?.services.find((x) => x.service === 'p-check');
                   if (service) {
                     // 프리미엄 체크가 가입되어 있는경우
                     await authStore.setToken(result.accessToken, result.refreshToken);
-                    await authStore.socialConnect(provider);
+                    // await authStore.socialConnect(provider);
                     await authStore.login();
                   } else {
                     // 프리미엄 체크가 가입이 안되어 있는경우
                     navigation.navigate('SignUpNickName', {
-                      provider,
+                      // provider,
                       accessToken: result.accessToken,
                       refreshToken: result.refreshToken,
                     });
@@ -365,7 +364,8 @@ function SignUp({ route, navigation }): React.ReactElement {
           setToken(result?.accessToken);
           signIn.clearTimer();
 
-          if (!result.profile) {
+          // if (!result.profile) {
+          if (!result.accessToken) {
             fadeInName();
           }
         }
@@ -386,7 +386,7 @@ function SignUp({ route, navigation }): React.ReactElement {
   const handleChangeNickName = async (value: string): Promise<void> => {
     runInAction(() => {
       if (value?.length <= 15) {
-        signIn.nickName = value;
+        signIn.name = value;
         signIn.isNickNameButtonEnabled = value?.length >= 2;
       }
     });
@@ -451,14 +451,14 @@ function SignUp({ route, navigation }): React.ReactElement {
   const handleSignUp = async (): Promise<void> => {
     const phoneNumber: string = cleanPhoneNumber(signIn.phone);
 
-    if (phoneNumber && signIn.nickName && signIn.code && signIn.birthDay && signIn.gender) {
+    if (phoneNumber && signIn.name && signIn.code && token) {
       try {
         const result = await authStore.signUp(
-          signIn.nickName,
-          phoneNumber,
-          convertBirthDate(signIn.birthDay, signIn.gender),
-          signIn.gender === '1' || signIn.gender === '3' ? 'male' : 'female',
-          false,
+          signIn.name,
+          signIn.password,
+          // convertBirthDate(signIn.birthDay, signIn.gender),
+          // signIn.gender === '1' || signIn.gender === '3' ? 'male' : 'female',
+          signIn.code,
           token,
         );
         if (result) {
@@ -467,7 +467,7 @@ function SignUp({ route, navigation }): React.ReactElement {
               text: '확인',
               onPress: async (): Promise<void> => {
                 await authStore.setToken(result.accessToken, result.refreshToken);
-                await authStore.socialConnect(provider);
+                // await authStore.socialConnect(provider);
                 await authStore.login();
               },
               style: 'default',
@@ -522,13 +522,8 @@ function SignUp({ route, navigation }): React.ReactElement {
           <Button
             canClick={signIn.isNickNameButtonEnabled}
             disabled={!signIn.isNickNameButtonEnabled}
-            onPress={async () => {
-              const { isExist } = await getNickNameExists(signIn.nickName);
-              if (isExist) {
-                Alert.alert('이미 존재하는 닉네임입니다.');
-                return;
-              }
-              fadeInBirth();
+            onPress={() => {
+              console.log('wow');
             }}>
             <ButtonText>다음</ButtonText>
           </Button>
@@ -591,7 +586,7 @@ function SignUp({ route, navigation }): React.ReactElement {
                     forceShow
                     onChangeText={handleChangeGender}
                   />
-                  <View style={{ marginRight: 8 }}>
+                  {/* <View style={{ marginRight: 8 }}>
                     <DotIcon width={7} height={7} />
                   </View>
                   <View style={{ marginRight: 8 }}>
@@ -608,7 +603,7 @@ function SignUp({ route, navigation }): React.ReactElement {
                   </View>
                   <View style={{ marginRight: 8 }}>
                     <DotIcon width={7} height={7} />
-                  </View>
+                  </View> */}
                 </HorizontalView>
               </HorizontalView>
             </Animated.View>
@@ -626,7 +621,7 @@ function SignUp({ route, navigation }): React.ReactElement {
                 textAlign="left"
                 placeholder="닉네임"
                 editable={step === STEP.NICK_NAME}
-                value={signIn.nickName}
+                value={signIn.name}
                 forceShow
                 onChangeText={handleChangeNickName}
                 onSubmitEditing={() => {
@@ -701,7 +696,7 @@ function SignUp({ route, navigation }): React.ReactElement {
               [
                 {
                   text: '다음에 하기',
-                  onPress: () => navigation.goBack(),
+                  // onPress: () => navigation.goBack(),
                   style: 'cancel',
                 },
                 {
@@ -711,7 +706,7 @@ function SignUp({ route, navigation }): React.ReactElement {
               { cancelable: false },
             )
           }>
-          <CloseIcon width={24} height={24} />
+          {/* <CloseIcon width={24} height={24} /> */}
         </CloseButton>
 
         {renderButton()}

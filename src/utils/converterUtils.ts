@@ -60,12 +60,7 @@ export const convertTimeStampDiffString = (timeStamp: number): string => {
   return dateString;
 };
 
-export const convertChannelUrl = (
-  type: string,
-  id: number,
-  writerId,
-  sendbirdId,
-): string => {
+export const convertChannelUrl = (type: string, id: number, writerId, sendbirdId): string => {
   return `p-check_${type}_${id}_${writerId}_${sendbirdId}`;
 };
 

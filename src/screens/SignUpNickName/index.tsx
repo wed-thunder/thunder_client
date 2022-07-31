@@ -57,7 +57,7 @@ interface Props {
 
 function SignUpNickName({ route }: Props): React.ReactElement {
   const { authStore } = rootStore;
-  const { provider, accessToken, refreshToken } = route.params;
+  const { accessToken, refreshToken } = route.params;
 
   const [nickName, setNickName] = useState<string>('');
   const [nickNameButtonEnabled, setNickNameButtonEnabled] = useState<boolean>(false);
@@ -93,9 +93,9 @@ function SignUpNickName({ route }: Props): React.ReactElement {
       Alert.alert('이미 존재하는 닉네임입니다.');
     } else {
       await authStore.setToken(accessToken, refreshToken);
-      await authStore.signUpService(accessToken);
-      await authStore.updateProfile({ nickname: nickName });
-      await authStore.socialConnect(provider);
+      // await authStore.signUp({name: nickName, });
+      // await authStore.updateProfile({ nickname: nickName });
+      // await authStore.socialConnect(provider);
       await authStore.login();
     }
   };
@@ -104,7 +104,7 @@ function SignUpNickName({ route }: Props): React.ReactElement {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <Container>
         <Vertical>
-          <Title>{'프리미엄체크 시작하기 !\n닉네임을 입력해주세요.'}</Title>
+          <Title>{'썬더 시작하기 !\n닉네임을 입력해주세요.'}</Title>
 
           <Animated.View style={[{ opacity: fadeAnimName }]}>
             <ThunderInputRound

@@ -4,7 +4,7 @@ import React from 'react';
 import { Alert, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
-import IconEmpty from '@/assets/ic_empty.svg';
+// import IconEmpty from '@/assets/ic_empty.svg';
 import COLOR from '@/constant/color';
 import { IChannel } from '@/models/Channel';
 import { RootNavigationProp } from '@/navigation/types';
@@ -114,6 +114,14 @@ const SwipeButtonText = styled.Text`
   color: ${COLOR.WHITE};
 `;
 
+const Text = styled.Text`
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  color: ${COLOR.GRAY600};
+  margin-top: 23px;
+`;
+
 interface Props {
   channelData: IChannel;
 }
@@ -183,7 +191,8 @@ export function ChannelItem({ channelData }: Props): React.ReactElement {
             />
           </ChannelProfileImageContainer>
         ) : (
-          <IconEmpty width={50} height={50} />
+          // <IconEmpty width={50} height={50} />
+          <Text>sorry</Text>
         )}
 
         <ChannelTextContainer>
